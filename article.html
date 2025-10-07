@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>Safari</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Safari">
+    
+    <style>
+        @font-face {
+            font-family: 'SF Pro Text';
+            src: url('./sf-pro-text-regular-webfont.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #000;
+            overflow-x: hidden;
+            height: 100dvh;
+            position: relative;
+        }
+
+        .content {
+            width: 100%;
+            height: 200vh;
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 100%);
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 160px;
+        }
+
+        .content img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Safari Bottom Bar - Optimized padding */
+        .safari-bottom-bar {
+            position: fixed;
+            bottom: -2px;
+            left: 0;
+            right: -1px;
+            background: #424242;
+            height: 140px;
+            z-index: 1000;
+            transition: all 0.3s ease-out;
+            padding-bottom: 50px;
+        }
+
+        .safari-bottom-bar.hidden {
+            transform: translateY(50px);
+            background: #000000;
+            height: 100px;
+            border-top: 1px solid #666666;
+            padding-bottom: 40px;
+        }
+
+        .safari-bottom-bar.hidden .nav-icons {
+            display: none;
+        }
+
+        /* URL Bar */
+        .url-bar {
+            background: #727272;
+            border-radius: 10px;
+            margin: 8px 16px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            transition: opacity 0.3s ease-out;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .safari-bottom-bar.hidden .url-bar {
+            opacity: 0;
+        }
+
+        .url-text {
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 400;
+            font-family: 'SF Pro Text', sans-serif;
+            flex: 1;
+            text-align: center;
+        }
+
+        .url-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Hidden state URL text */
+        .safari-bottom-bar.hidden::after {
+            content: "sydsvenskan.se";
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 400;
+            font-family: 'SF Pro Text', sans-serif;
+            opacity: 1;
+        }
+
+        /* Navigation Icons */
+        .nav-icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            height: 44px;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-icon.disabled {
+            opacity: 0.3;
+        }
+
+        /* Responsive design for all iPhone models - Optimized */
+        @media screen and (max-width: 375px) {
+            /* iPhone SE, 12 mini, 13 mini */
+            .safari-bottom-bar {
+                height: 140px;
+                padding-bottom: 50px;
+            }
+            .safari-bottom-bar.hidden {
+                height: 100px;
+                padding-bottom: 40px;
+            }
+            .nav-icons {
+                padding: 0 20px;
+            }
+            .nav-icon {
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        @media screen and (min-width: 376px) and (max-width: 414px) {
+            /* iPhone 6/7/8 Plus, 11, XR */
+            .safari-bottom-bar {
+                height: 140px;
+                padding-bottom: 50px;
+            }
+            .safari-bottom-bar.hidden {
+                height: 100px;
+                padding-bottom: 40px;
+            }
+        }
+
+        @media screen and (min-width: 415px) {
+            /* iPhone 12/13/14 Pro Max */
+            .safari-bottom-bar {
+                height: 150px;
+                padding-bottom: 60px;
+            }
+            .safari-bottom-bar.hidden {
+                height: 110px;
+                padding-bottom: 50px;
+            }
+            .nav-icons {
+                padding: 0 28px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="content" onclick="goBack()">
+        <img src="artikel.webp" style="width: 100%; height: auto;">
+    </div>
+
+    <!-- Safari Bottom Bar -->
+    <div class="safari-bottom-bar" id="bottomBar">
+        <!-- URL Bar -->
+        <div class="url-bar">
+            <img src="site settings.svg" class="url-icon" alt="Site Settings">
+            <div class="url-text">sydsvenskan.se</div>
+            <img src="reload.svg" class="url-icon" alt="Reload">
+        </div>
+        
+        <!-- Navigation Icons -->
+        <div class="nav-icons">
+            <img src="back.svg" class="nav-icon" alt="Back" onclick="goBack()">
+            <img src="forward.svg" class="nav-icon disabled" alt="Forward">
+            <img src="share.svg" class="nav-icon" alt="Share">
+            <img src="readlater.svg" class="nav-icon" alt="Read Later">
+            <img src="viewtabs.svg" class="nav-icon" alt="Tabs">
+        </div>
+    </div>
+
+    <script>
+        let lastScrollY = 0;
+        const bottomBar = document.getElementById('bottomBar');
+
+        function handleScroll() {
+            const currentScrollY = window.scrollY || document.documentElement.scrollTop;
+            
+            if (currentScrollY > 30) {
+                bottomBar.classList.add('hidden');
+            } else {
+                bottomBar.classList.remove('hidden');
+            }
+            
+            lastScrollY = currentScrollY;
+        }
+
+        // Multiple event listeners for PWA compatibility
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        document.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('touchmove', handleScroll, { passive: true });
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Test function - remove after testing
+        function forceHidden() {
+            bottomBar.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

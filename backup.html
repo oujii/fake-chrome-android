@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Safari</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Safari">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png">
+    
+    <style>
+        @font-face {
+            font-family: 'SF Pro Text';
+            src: url('./sf-pro-text-regular-webfont.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #000;
+            overflow-x: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        .content {
+            width: 100%;
+            height: 200vh; /* Placeholder för scrollbar innehåll */
+            background: linear-gradient(to bottom, #f0f0f0 0%, #e0e0e0 100%);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .content img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Safari Bottom Bar */
+        .safari-bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #424242;
+            height: calc(88px + env(safe-area-inset-bottom) + 20px);
+            z-index: 1000;
+            transition: all 0.3s ease-out;
+            padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
+        }
+
+        .safari-bottom-bar.hidden {
+            transform: translateY(28px);
+            background: #000000;
+            height: 80px;
+            border-top: 1px solid #666666;
+        }
+
+        .safari-bottom-bar.hidden .nav-icons {
+            display: none;
+        }
+
+        /* URL Bar */
+        .url-bar {
+            background: #515151;
+            border-radius: 10px;
+            margin: 8px 16px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .safari-bottom-bar.hidden .url-bar {
+            opacity: 0;
+        }
+
+        .url-text {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 400;
+            font-family: 'SF Pro Text', sans-serif;
+            flex: 1;
+            text-align: center;
+        }
+
+        .url-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Hidden state URL text */
+        .safari-bottom-bar.hidden::after {
+            content: "example.com";
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 400;
+            font-family: 'SF Pro Text', sans-serif;
+            opacity: 1;
+        }
+
+        /* Navigation Icons */
+        .nav-icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            height: 44px;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-icon.disabled {
+            opacity: 0.3;
+        }
+
+        /* Responsive design for all iPhone models */
+        @media screen and (max-width: 375px) {
+            /* iPhone SE, 12 mini, 13 mini */
+            .safari-bottom-bar {
+                height: 83px;
+            }
+            .nav-icons {
+                padding: 0 20px;
+            }
+            .nav-icon {
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        @media screen and (min-width: 376px) and (max-width: 414px) {
+            /* iPhone 6/7/8 Plus, 11, XR */
+            .safari-bottom-bar {
+                height: 88px;
+            }
+        }
+
+        @media screen and (min-width: 415px) {
+            /* iPhone 12/13/14 Pro Max */
+            .safari-bottom-bar {
+                height: 139px;
+            }
+            .nav-icons {
+                padding: 0 28px;
+            }
+        }
+
+        /* Safe area for devices with home indicator */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .safari-bottom-bar {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="content" onclick="navigateToArticle()">
+        <div style="padding: 40px 20px; text-align: center;">
+            <h1 style="font-size: 48px; margin-bottom: 40px; color: #000;">Example Domain</h1>
+            <p style="font-size: 16px; line-height: 1.5; color: #333; max-width: 600px; margin: 0 auto;">
+                This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.
+            </p>
+            <p style="color: #007AFF; margin-top: 40px; font-size: 16px;">More information...</p>
+        </div>
+        
+        <!-- Placeholder for scrollable content -->
+        <div style="height: 1000px; background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);"></div>
+    </div>
+
+    <!-- Safari Bottom Bar -->
+    <div class="safari-bottom-bar" id="bottomBar">
+        <!-- URL Bar -->
+        <div class="url-bar">
+            <img src="site settings.svg" class="url-icon" alt="Site Settings">
+            <div class="url-text">example.com</div>
+            <img src="reload.svg" class="url-icon" alt="Reload">
+        </div>
+        
+        <!-- Navigation Icons -->
+        <div class="nav-icons">
+            <img src="back.svg" class="nav-icon disabled" alt="Back">
+            <img src="forward.svg" class="nav-icon" alt="Forward">
+            <img src="share.svg" class="nav-icon" alt="Share">
+            <img src="readlater.svg" class="nav-icon" alt="Read Later">
+            <img src="viewtabs.svg" class="nav-icon" alt="Tabs">
+        </div>
+    </div>
+
+    <script>
+        let lastScrollY = 0;
+        const bottomBar = document.getElementById('bottomBar');
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                // Scrolling down - hide URL
+                bottomBar.classList.add('hidden');
+            } else {
+                // Scrolling up - show URL
+                bottomBar.classList.remove('hidden');
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+
+        function navigateToArticle() {
+            window.location.href = 'article.html';
+        }
+    </script>
+</body>
+</html>
